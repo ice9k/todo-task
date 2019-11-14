@@ -5,6 +5,7 @@ export default class TodosModel extends BaseModel {
     const $todos = this.scope('todos')
     const id = this.id()
     await $todos.addAsync({  
+      id,
       text: taskText, 
       isDone: false, 
       createdAt: Date.now() 
