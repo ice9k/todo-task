@@ -3,17 +3,16 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import { observer, useDoc } from 'startupjs'
 import './index.styl'
 
-export default observer(function ToDo ({ id }) {
+export default observer(function Todo ({ id }) {
   const [todo, $todo] = useDoc('todos', id)
   const [isEditing, setIsEditing] = useState()
-  if (!todo) return
   const [inputText, setInputText] = useState(todo.text)
   const removeToDo = () => { $todo.del() }
-
+  const save = () => {$todo.set('text', inputText); setIsEditing(false)}
   return pug`
     View.root
       if isEditing  
-        TextInput.textInput(value=inputText onChangeText=text=>setInputText(text) autoFocus selectTextOnFocus onBlur=()=>{$todo.set('text', inputText); setIsEditing(false)})
+        TextInput.textInput(value=inputText onChangeText=setInputText autoFocus selectTextOnFocus onBlur=save)
       else
         TouchableOpacity(onLongPress=()=>{setIsEditing(true)} onPress=()=>{$todo.set('isDone', !todo.isDone)})
           View.toDoText
