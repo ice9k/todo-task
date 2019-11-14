@@ -7,14 +7,27 @@ export default observer(function Todo ({ id }) {
   const [todo, $todo] = useDoc('todos', id)
   const [isEditing, setIsEditing] = useState()
   const [inputText, setInputText] = useState(todo.text)
-  const removeToDo = () => { $todo.del() }
-  const save = () => {$todo.set('text', inputText); setIsEditing(false)}
+  
+  const removeToDo = () => $todo.del()
+  const save = () => {
+    $todo.set('text', inputText) 
+    setIsEditing(false)
+  }
   return pug`
     View.root
       if isEditing  
-        TextInput.textInput(value=inputText onChangeText=setInputText autoFocus selectTextOnFocus onBlur=save)
+        TextInput.textInput(
+          value=inputText 
+          onChangeText=setInputText 
+          autoFocus 
+          selectTextOnFocus 
+          onBlur=save
+        )
       else
-        TouchableOpacity(onLongPress=()=>{setIsEditing(true)} onPress=()=>{$todo.set('isDone', !todo.isDone)})
+        TouchableOpacity(
+          onLongPress=() => setIsEditing(true) 
+          onPress=() => $todo.toggleStatus()
+        )
           View.toDoText
             if (todo.isDone) 
               Text.toDoText &#9745;
